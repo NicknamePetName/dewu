@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youkeda.dewu.dao.ProductDetailDAO">
+    <resultMap id="BaseResultMap" type="com.youkeda.dewu.dataobject.ProductDetailDO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="product_id" jdbcType="VARCHAR" property="productId"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="size" jdbcType="DOUBLE" property="size"/>
+        <result column="stock" jdbcType="INTEGER" property="stock"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM product_detail WHERE id=#{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.youkeda.dewu.dataobject.ProductDetailDO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO product_detail
+        VALUES (#{id},#{productId},#{price},#{size},#{stock},now(),now())
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM product_detail WHERE id=#{id}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM product_detail
+    </select>
+    
+    <update id="updateByPrimaryKey" parameterType="com.youkeda.dewu.dataobject.ProductDetailDO">
+        UPDATE product_detail
+        <set>
+            <if test="productId != null">
+                product_id=#{productId},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="size != null">
+                size=#{size},
+            </if>
+            <if test="stock != null">
+                stock=#{stock},
+            </if>
+            gmt_modified=now()
+        </set>
+    </update>
+</mapper>

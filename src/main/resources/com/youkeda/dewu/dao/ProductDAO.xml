@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youkeda.dewu.dao.ProductDAO">
+    <resultMap id="BaseResultMap" type="com.youkeda.dewu.dataobject.ProductDO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="purchase_num" jdbcType="INTEGER" property="purchaseNum"/>
+        <result column="product_intro" jdbcType="VARCHAR" property="productIntro"/>
+        <result column="product_imgs" jdbcType="VARCHAR" property="productImgs"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM product WHERE id=#{id}
+    </delete>
+
+    <insert id="insert" parameterType="com.youkeda.dewu.dataobject.ProductDO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO product
+        VALUES (#{id},#{name},#{price},#{purchaseNum},#{productIntro},#{productImgs},now(),now())
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM product WHERE id=#{id}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * FROM product
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.youkeda.dewu.dataobject.ProductDO">
+        UPDATE product
+        <set>
+            <if test="name != null">
+                name=#{name},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="purchaseNum != null">
+                purchase_num=#{purchaseNum},
+            </if>x
+            <if test="productIntro != null">
+                product_intro=#{productIntro},
+            </if>
+            <if test="productImgs != null">
+                product_imgs=#{productImgs},
+            </if>
+            gmt_modified=now()
+        </set>
+        WHERE id=#{id}
+    </update>
+
+    <select id="selectAllCounts" resultType="int">
+        SELECT COUNT(id) FROM product
+    </select>
+
+    <select id="pageQuery" resultMap="BaseResultMap">
+        SELECT * FROM product
+        <bind name="currentIndex" value="pagination * pageSize"/>
+        LiMIT #{currentIndex},#{pageSize}
+    </select>
+</mapper>
