@@ -47,4 +47,8 @@
             gmt_modified=now()
         </set>
     </update>
+
+    <select id="selectByProductId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM product_detail WHERE product_id=#{productId}
+    </select>
 </mapper>

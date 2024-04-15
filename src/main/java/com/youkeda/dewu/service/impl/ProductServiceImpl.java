@@ -14,7 +14,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -71,4 +70,10 @@ public class ProductServiceImpl implements ProductService {
 
         return result;
     }
+
+    @Override
+    public Product get(String productId) {
+        return productDAO.selectByPrimaryKey(productId).convertToModel();
+    }
+
 }

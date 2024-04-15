@@ -1,7 +1,9 @@
 package com.youkeda.dewu.dao;
 
 import com.youkeda.dewu.dataobject.ProductDetailDO;
+import com.youkeda.dewu.model.ProductDetail;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,4 +24,6 @@ public interface ProductDetailDAO {
 
     /** 根据参数对象中的主键值更新一条数据 */
     int updateByPrimaryKey(ProductDetailDO record);
+
+    List<ProductDetailDO> selectByProductId(@Param("productId") String productId);
 }

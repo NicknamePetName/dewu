@@ -2,10 +2,12 @@ package com.youkeda.dewu.service;
 
 import com.youkeda.dewu.model.Paging;
 import com.youkeda.dewu.model.Product;
+import com.youkeda.dewu.model.ProductDetail;
 import com.youkeda.dewu.param.BasePageParam;
 
-public interface ProductService {
+import java.util.List;
 
+public interface ProductService {
     /**
      * 增加或修改商品
      * @param product 商品
@@ -20,4 +22,10 @@ public interface ProductService {
      */
     Paging<Product> pageQueryProduct(BasePageParam param);
 
+    /**
+     * 根据主键获取商品
+     * @param productId 商品主键
+     * @return Product
+     */
+    Product get(String productId);
 }
