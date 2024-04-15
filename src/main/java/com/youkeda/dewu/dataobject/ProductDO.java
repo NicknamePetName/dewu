@@ -160,9 +160,7 @@ public class ProductDO {
     }
 
     public ProductDO(Product product) {
-
         BeanUtils.copyProperties(product, this);
-
     }
 
     public Product convertToModel() {

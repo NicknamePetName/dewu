@@ -4,31 +4,28 @@ import com.youkeda.dewu.model.Result;
 import com.youkeda.dewu.model.User;
 import com.youkeda.dewu.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
  * @author joe
  */
 @Controller
+@RequestMapping("/api/user")
 public class UserAPI {
 
     @Autowired
     private UserService userService;
-
-    @PostMapping("/api/user/reg")
     @ResponseBody
+    @PostMapping("/reg")
     public Result<User> reg(@RequestParam("userName") String userName, @RequestParam("pwd") String pwd) {
         return userService.register(userName, pwd);
     }
-
-    @PostMapping("/api/user/login")
     @ResponseBody
+    @PostMapping("/login")
     public Result<User> login(@RequestParam("userName") String userName, @RequestParam("pwd") String pwd,
                               HttpServletRequest request) {
         Result<User> result = userService.login(userName, pwd);
@@ -39,9 +36,8 @@ public class UserAPI {
 
         return result;
     }
-
-    @GetMapping("/api/user/logout")
     @ResponseBody
+    @GetMapping("/logout")
     public Result logout(HttpServletRequest request) {
         Result result = new Result();
         request.getSession().removeAttribute("userId");
@@ -49,5 +45,16 @@ public class UserAPI {
         result.setSuccess(true);
         return result;
     }
+
+    @ResponseBody
+    @GetMapping("/checklogin")
+    public Result<Boolean> checkLogin(HttpServletRequest request) {
+        Result<Boolean> result = new Result<>();
+        HttpSession session = request.getSession();
+        result.setData(userService.checkLogin(session));
+        request.getSession(true);
+        return result;
+    }
+
 
 }

@@ -5,6 +5,7 @@ import com.youkeda.dewu.dataobject.UserDO;
 import com.youkeda.dewu.model.Result;
 import com.youkeda.dewu.model.User;
 import com.youkeda.dewu.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
         result.setSuccess(true);
 
-        result.setData(userDO1.toModel());
+        result.setData(userDO1.convertToModel());
 
         return result;
     }
@@ -95,8 +96,13 @@ public class UserServiceImpl implements UserService {
 
         result.setSuccess(true);
 
-        result.setData(userDO.toModel());
+        result.setData(userDO.convertToModel());
 
         return result;
+    }
+
+    @Override
+    public Boolean checkLogin(HttpSession session) {
+        return session.getAttribute("userId") != null;
     }
 }

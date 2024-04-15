@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youkeda.dewu.dao.OrderDAO">
+    <resultMap id="BaseResultMap" type="com.youkeda.dewu.dataobject.OrderDO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="order_number" jdbcType="VARCHAR" property="orderNumber"/>
+        <result column="product_detail_id" jdbcType="VARCHAR" property="productDetailId"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="total_price" jdbcType="DOUBLE" property="totalPrice"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.youkeda.dewu.dataobject.OrderDO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        INSERT INTO order
+        VALUES (#{id},#{orderNumber},#{userId},#{productDetail},#{productId},#{totalPrice},now(),now())
+    </insert>
+
+</mapper>

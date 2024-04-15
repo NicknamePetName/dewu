@@ -2,6 +2,7 @@ package com.youkeda.dewu.service;
 
 import com.youkeda.dewu.model.Result;
 import com.youkeda.dewu.model.User;
+import jakarta.servlet.http.HttpSession;
 
 public interface UserService {
 
@@ -22,5 +23,14 @@ public interface UserService {
      * @return
      */
     public Result<User> login(String userName, String pwd);
+
+    /**
+     * 判断是否登录
+     *
+     * @param session
+     * @return
+     */
+
+    public Boolean checkLogin(HttpSession session);
 
 }
