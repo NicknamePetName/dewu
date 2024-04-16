@@ -20,4 +20,12 @@ public interface ProductDetailService {
      * @return ProductDetail
      */
     List<ProductDetail> getByProductId(String productId);
+
+    /**
+     * 获取商品详情
+     *
+     * @param id 主键
+     * @return ProductDetail
+     */
+    ProductDetail get(String id);
 }

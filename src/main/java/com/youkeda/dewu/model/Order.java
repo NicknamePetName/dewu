@@ -2,12 +2,12 @@ package com.youkeda.dewu.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class Order implements Serializable {
+
+public class Order {
     /**
-     * 主键
+     * 主键id
      */
     private String id;
 
@@ -17,24 +17,21 @@ public class Order implements Serializable {
     private String orderNumber;
 
     /**
-     * 用户Id
+     * 用户id
      */
-    private Long userId;
-
+    private String userId;
     /**
      * 用户模型
      */
     private User user;
-
     /**
-     * 商品模型
+     * 商品
+     */
+    private String productDetailId;
+    /**
+     * 商品
      */
     private ProductDetail productDetail;
-
-    /**
-     * 商品Id
-     */
-    private String productId;
 
     /**
      * 订单总价格
@@ -44,7 +41,7 @@ public class Order implements Serializable {
     /**
      * 订单状态
      */
-    private OrderStatus orderStatus;
+    private OrderStatus status;
 
     /**
      * 创建时间
@@ -53,7 +50,7 @@ public class Order implements Serializable {
     private Date gmtCreated;
 
     /**
-     * 创建日期
+     * 修改时间
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date gmtModified;
@@ -74,11 +71,11 @@ public class Order implements Serializable {
         this.orderNumber = orderNumber;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -90,20 +87,20 @@ public class Order implements Serializable {
         this.user = user;
     }
 
+    public String getProductDetailId() {
+        return productDetailId;
+    }
+
+    public void setProductDetailId(String productDetailId) {
+        this.productDetailId = productDetailId;
+    }
+
     public ProductDetail getProductDetail() {
         return productDetail;
     }
 
     public void setProductDetail(ProductDetail productDetail) {
         this.productDetail = productDetail;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
     }
 
     public Double getTotalPrice() {
@@ -114,12 +111,12 @@ public class Order implements Serializable {
         this.totalPrice = totalPrice;
     }
 
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
+    public OrderStatus getStatus() {
+        return status;
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public Date getGmtCreated() {

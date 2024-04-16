@@ -14,8 +14,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="com.youkeda.dewu.dataobject.OrderDO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
-        INSERT INTO order
-        VALUES (#{id},#{orderNumber},#{userId},#{productDetail},#{productId},#{totalPrice},now(),now())
+        INSERT INTO `order`
+        VALUES (#{id},#{orderNumber},#{userId},#{productDetailId},#{totalPrice},#{status},now(),now())
     </insert>
 
 </mapper>

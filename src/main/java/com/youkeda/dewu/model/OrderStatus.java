@@ -4,7 +4,7 @@ public enum OrderStatus {
     /**
      * 待付款
      */
-    WAIT_BUYER_PAR,
+    WAIT_BUYER_PAY,
 
     /**
      * 订单关闭

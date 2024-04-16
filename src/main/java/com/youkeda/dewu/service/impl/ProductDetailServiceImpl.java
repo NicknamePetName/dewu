@@ -38,4 +38,13 @@ public class ProductDetailServiceImpl implements ProductDetailService {
                 .map(ProductDetailDO::convertToModel)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ProductDetail get(String id) {
+        if (StringUtils.isBlank(id)) {
+            return null;
+        }
+        ProductDetailDO productDetailDO = productDetailDAO.selectByPrimaryKey(id);
+        return productDetailDO != null ? productDetailDO.convertToModel() : new ProductDetail();
+    }
 }
