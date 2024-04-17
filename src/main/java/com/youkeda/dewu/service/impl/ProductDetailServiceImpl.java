@@ -8,6 +8,7 @@ import com.youkeda.dewu.util.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,25 +19,50 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 
     @Autowired
     private ProductDetailDAO productDetailDAO;
+
+    @Override
+    public List<ProductDetail> queryProductDetail(List<String> productDetailIds) {
+        if (CollectionUtils.isEmpty(productDetailIds)) {
+            return null;
+        }
+
+        List<ProductDetailDO> productDetailDOS = productDetailDAO.selectByIds(productDetailIds);
+
+        return CollectionUtils.isEmpty(productDetailDOS) ? new ArrayList<>() : productDetailDOS.stream()
+                .map(ProductDetailDO::convertToModel)
+                .collect(Collectors.toList());
+    }
+
     @Override
     public int save(ProductDetail productDetail) {
+
         if (StringUtils.isBlank(productDetail.getId())) {
             productDetail.setId(UUIDUtils.getUUID());
             return productDetailDAO.insert(new ProductDetailDO(productDetail));
         }
 
         return productDetailDAO.updateByPrimaryKey(new ProductDetailDO(productDetail));
+
     }
 
     @Override
     public List<ProductDetail> getByProductId(String productId) {
 
+        List<ProductDetail> productDetails = new ArrayList<>();
         if (StringUtils.isBlank(productId)) {
-            return new ArrayList<>();
+            return productDetails;
         }
-        return productDetailDAO.selectByProductId(productId).stream()
-                .map(ProductDetailDO::convertToModel)
-                .collect(Collectors.toList());
+
+        List<ProductDetailDO> productDetailDOS = productDetailDAO.selectByProductId(productId);
+        if (CollectionUtils.isEmpty(productDetailDOS)) {
+            return productDetails;
+        }
+
+        for (ProductDetailDO productDetailDO : productDetailDOS) {
+            productDetails.add(productDetailDO.convertToModel());
+        }
+
+        return productDetails;
     }
 
     @Override
@@ -45,6 +71,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
             return null;
         }
         ProductDetailDO productDetailDO = productDetailDAO.selectByPrimaryKey(id);
-        return productDetailDO != null ? productDetailDO.convertToModel() : new ProductDetail();
+        ProductDetail productDetail = productDetailDO.convertToModel();
+        return productDetail;
     }
 }

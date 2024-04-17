@@ -18,4 +18,32 @@
         VALUES (#{id},#{orderNumber},#{userId},#{productDetailId},#{totalPrice},#{status},now(),now())
     </insert>
 
+    <select id="selectCounts" resultType="java.lang.Integer" parameterType="com.youkeda.dewu.param.QueryOrderParam">
+        select count(*)
+        from `order`
+        <where>
+            <if test="productDetailId != '' and productDetailId != null">
+                AND product_detail_id = #{productDetailId,jdbcType=VARCHAR}
+            </if>
+            <if test="time != null">
+                AND gmt_modified <![CDATA[ >= ]]> #{time,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </select>
+
+    <select id="pageQuery" resultMap="BaseResultMap" parameterType="com.youkeda.dewu.param.QueryOrderParam">
+        select *
+        from `order`
+        <where>
+            <if test="productDetailId != '' and productDetailId != null">
+                AND product_detail_id = #{productDetailId,jdbcType=VARCHAR}
+            </if>
+            <if test="time != null">
+                AND gmt_modified <![CDATA[ >= ]]> #{time,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+        <bind name="currentIndex" value="(pageNum - 1)* pageSize"/>
+        limit #{currentIndex},#{pageSize}
+    </select>
+
 </mapper>

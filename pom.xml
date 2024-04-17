@@ -97,9 +97,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-
+		<!-- 支付宝 SDK 支持 -->
+		<dependency>
+			<groupId>com.alipay.sdk</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+			<version>4.39.42.ALL</version>
+		</dependency>
 	</dependencies>
-
 
 	<build>
 		<plugins>

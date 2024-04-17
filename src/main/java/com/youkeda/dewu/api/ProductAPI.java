@@ -18,7 +18,7 @@ public class ProductAPI {
 
     @ResponseBody
     @GetMapping("/page")
-    public Result<Paging<Product>> queryPage(@RequestBody BasePageParam param) {
+    public Result<Paging<Product>> queryPage(@RequestBody(required = false) BasePageParam param) {
         Result<Paging<Product>> result = new Result<>();
         result.setData(productService.pageQueryProduct(param));
         result.setSuccess(true);

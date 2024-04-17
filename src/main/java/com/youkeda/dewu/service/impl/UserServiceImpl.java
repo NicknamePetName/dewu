@@ -5,13 +5,20 @@ import com.youkeda.dewu.dataobject.UserDO;
 import com.youkeda.dewu.model.Result;
 import com.youkeda.dewu.model.User;
 import com.youkeda.dewu.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
-@Service
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -33,7 +40,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserDO userDO = userDAO.findByUserName(userName);
-        if (userDO!=null){
+        if (userDO != null) {
             result.setCode("602");
             result.setMessage("用户名已经存在");
             return result;
@@ -76,7 +83,7 @@ public class UserServiceImpl implements UserService {
         }
 
         UserDO userDO = userDAO.findByUserName(userName);
-        if (userDO==null){
+        if (userDO == null) {
             result.setCode("602");
             result.setMessage("用户名不存在");
             return result;
@@ -87,12 +94,11 @@ public class UserServiceImpl implements UserService {
         // 生成md5值，并转大写字母
         String md5Pwd = DigestUtils.md5Hex(saltPwd).toUpperCase();
 
-        if (!StringUtils.equals(md5Pwd,userDO.getPwd())){
+        if (!StringUtils.equals(md5Pwd, userDO.getPwd())) {
             result.setCode("603");
             result.setMessage("密码不对");
             return result;
         }
-
 
         result.setSuccess(true);
 
@@ -102,7 +108,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> queryUser(List<Long> userIds) {
+        if (CollectionUtils.isEmpty(userIds)) {
+            return null;
+        }
+        List<UserDO> userDOS = userDAO.findByIds(userIds);
+        return CollectionUtils.isEmpty(userDOS) ? new ArrayList<>() : userDOS.stream()
+                .map(UserDO::convertToModel)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Boolean checkLogin(HttpSession session) {
-        return session.getAttribute("userId") != null;
+        Object userId = session.getAttribute("userId");
+        if (userId == null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

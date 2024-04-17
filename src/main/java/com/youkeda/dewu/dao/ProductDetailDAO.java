@@ -25,5 +25,9 @@ public interface ProductDetailDAO {
     /** 根据参数对象中的主键值更新一条数据 */
     int updateByPrimaryKey(ProductDetailDO record);
 
-    List<ProductDetailDO> selectByProductId(@Param("productId") String productId);
+
+
+    List<ProductDetailDO> selectByProductId(String productId);
+
+    List<ProductDetailDO> selectByIds(List<String> ids);
 }
