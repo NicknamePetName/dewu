@@ -1,8 +1,14 @@
-package com.youkeda.dewu.model;
+package com.youkeda.dewu.dataobject;
+
+import com.youkeda.dewu.model.PayType;
+import com.youkeda.dewu.model.PaymentRecord;
+import com.youkeda.dewu.model.PaymentStatus;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
-public class PaymentRecord {
+public class PaymentRecordDO {
     /**
      * 主键id
      */
@@ -36,12 +42,12 @@ public class PaymentRecord {
     /**
      * 支付类型
      */
-    private PayType payType;
+    private String payType;
 
     /**
      * 支付状态
      */
-    private PaymentStatus payStatus;
+    private String payStatus;
 
     /**
      * 订单额外信息
@@ -150,28 +156,28 @@ public class PaymentRecord {
     /**
      * 获取支付类型
      */
-    public PayType getPayType() {
+    public String getPayType() {
         return payType;
     }
 
     /**
      * 设置支付类型
      */
-    public void setPayType(PayType payType) {
+    public void setPayType(String payType) {
         this.payType = payType;
     }
 
     /**
      * 获取支付状态
      */
-    public PaymentStatus getPayStatus() {
+    public String getPayStatus() {
         return payStatus;
     }
 
     /**
      * 设置支付状态
      */
-    public void setPayStatus(PaymentStatus payStatus) {
+    public void setPayStatus(String payStatus) {
         this.payStatus = payStatus;
     }
 
@@ -229,5 +235,30 @@ public class PaymentRecord {
      */
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
+    }
+
+    public PaymentRecordDO() {
+    }
+
+    public PaymentRecordDO(PaymentRecord paymentRecord) {
+        BeanUtils.copyProperties(paymentRecord, this);
+        if (paymentRecord.getPayStatus() != null) {
+            this.setPayStatus(paymentRecord.getPayStatus().toString());
+        }
+        if (paymentRecord.getPayType() != null) {
+            this.setPayType(paymentRecord.getPayType().toString());
+        }
+    }
+
+    public PaymentRecord convertToModel() {
+        PaymentRecord paymentRecord = new PaymentRecord();
+        BeanUtils.copyProperties(this, paymentRecord);
+        if (!StringUtils.isEmpty(this.getPayStatus())) {
+            paymentRecord.setPayStatus(PaymentStatus.valueOf(this.getPayStatus()));
+        }
+        if (!StringUtils.isEmpty(this.getPayType())) {
+            paymentRecord.setPayType(PayType.valueOf(this.getPayType()));
+        }
+        return paymentRecord;
     }
 }

@@ -46,4 +46,8 @@
         limit #{currentIndex},#{pageSize}
     </select>
 
+    <select id="selectBYOrderNumber" resultMap="BaseResultMap" parameterType="com.youkeda.dewu.dataobject.OrderDO">
+        SELECT * FROM `order` WHERE order_number=#{orderNumber}
+    </select>
+
 </mapper>

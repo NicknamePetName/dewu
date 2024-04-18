@@ -20,4 +20,11 @@ public interface OrderService {
      * @return
      */
     Paging<Order> queryRecentPaySuccess(QueryOrderParam queryOrderParam);
+
+    /**
+     * 根据订单号查询
+     * @param orderNumber
+     * @return Order
+     */
+    Order getBYOrderNumber(String orderNumber);
 }

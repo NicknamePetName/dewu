@@ -8,6 +8,7 @@ import com.youkeda.dewu.service.OrderService;
 import com.youkeda.dewu.service.ProductDetailService;
 import com.youkeda.dewu.service.UserService;
 import com.youkeda.dewu.util.UUIDUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RAtomicLong;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,6 +92,14 @@ public class OrderServiceImpl implements OrderService {
         result.setPageSize(queryOrderParam.getPageSize());
         result.setTotalPage(orders.size() / queryOrderParam.getPageNum());
         return result;
+    }
+
+    @Override
+    public Order getBYOrderNumber(String orderNumber) {
+        if (StringUtils.isBlank(orderNumber)) {
+            return null;
+        }
+        return orderDAO.selectBYOrderNumber(orderNumber).convertToModel();
     }
 
     /**
