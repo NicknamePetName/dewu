@@ -4,6 +4,8 @@ import com.youkeda.dewu.model.Result;
 import com.youkeda.dewu.param.PaymentParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Map;
+
 public interface PayService {
     /**
      * 支付订单
@@ -12,4 +14,11 @@ public interface PayService {
      * @return Result
      */
     Result payOrder(PaymentParam paymentParam);
+
+    /**
+     * 支付宝回调接口
+     * @param mapParam 支付宝参数
+     * @return Result
+     */
+    Result alipayCallBack(Map<String, String> mapParam);
 }

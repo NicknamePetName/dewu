@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -62,10 +63,8 @@ public class ProductServiceImpl implements ProductService {
         result.setTotalPage(totalPage);
         //实际返回的数据
         List<ProductDO> productDOS = productDAO.pageQuery(param);
-        List<Product> products = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(productDOS)) {
-            productDOS.forEach(productDO -> products.add(productDO.convertToModel()));
-        }
+        List<Product> products = CollectionUtils.isEmpty(productDOS) ? new ArrayList<>() : productDOS.stream()
+                        .map(ProductDO::convertToModel).collect(Collectors.toList());
         result.setData(products);
 
         return result;

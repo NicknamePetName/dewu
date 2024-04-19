@@ -15,24 +15,22 @@
         where id = #{id,jdbcType=VARCHAR}
     </delete>
     <insert id="insert" parameterType="com.youkeda.dewu.dataobject.ProductDetailDO">
-        insert into product_detail (id, product_id, price,
-                                    size, stock, gmt_created,
-                                    gmt_modified)
+        insert into product_detail
         values (#{id,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE},
                 #{size,jdbcType=DOUBLE}, #{stock,jdbcType=INTEGER}, now(),
                 now())
     </insert>
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select id, product_id, price, `size`, stock, gmt_created, gmt_modified
+        select *
         from product_detail
         where id = #{id,jdbcType=VARCHAR}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
-        select id, product_id, price, `size`, stock, gmt_created, gmt_modified
+        select *
         from product_detail
     </select>
     <select id="selectByProductId" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select id, product_id, price, `size`, stock, gmt_created, gmt_modified
+        select *
         from product_detail
         where product_id = #{productId,jdbcType=VARCHAR}
     </select>

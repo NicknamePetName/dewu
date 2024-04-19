@@ -24,13 +24,13 @@
 
     <insert id="add" parameterType="com.youkeda.dewu.dataobject.UserDO" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user (user_name, pwd, nick_name,avatar,gmt_created,gmt_modified)
-        VALUES(#{userName}, #{pwd}, #{nickName}, #{avatar},now(),now())
+        VALUES (#{userName}, #{pwd}, #{nickName}, #{avatar},now(),now())
     </insert>
 
     <update id="update" parameterType="com.youkeda.dewu.dataobject.UserDO">
         update user
         <set>
-            <if test="nickName != null">
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(nickName)">
                 nick_name=#{nickName},
             </if>
         </set>
@@ -58,7 +58,7 @@
     <select id="search" resultMap="userResultMap">
         select * from user
         <where>
-            <if test="keyWord != null">
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(keyWord)">
                 user_name like CONCAT('%',#{keyWord},'%')
                 or nick_name like CONCAT('%',#{keyWord},'%')
             </if>

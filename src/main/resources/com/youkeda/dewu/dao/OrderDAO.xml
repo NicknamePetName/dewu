@@ -47,7 +47,29 @@
     </select>
 
     <select id="selectBYOrderNumber" resultMap="BaseResultMap" parameterType="com.youkeda.dewu.dataobject.OrderDO">
-        SELECT * FROM `order` WHERE order_number=#{orderNumber}
+        SELECT * FROM `order` WHERE order_number = #{orderNumber}
     </select>
 
+    <update id="update" parameterType="com.youkeda.dewu.dataobject.OrderDO">
+        UPDATE `order`
+        <set>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(orderNumber)">
+                order_number = #{orderNumber},
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(userId)">
+                user_id = #{userId},
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(productDetailId)">
+                product_detail_id = #{productDetailId},
+            </if>
+            <if test="totalPrice != null">
+                total_price = #{totalPrice},
+            </if>
+            <if test="@org.apache.commons.lang3.StringUtils@isNotBlank(status)">
+                status = #{status},
+            </if>
+            gmt_modified=now()
+        </set>
+        WHERE id = #{id}
+    </update>
 </mapper>

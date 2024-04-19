@@ -6,12 +6,10 @@ import com.alipay.api.request.AlipayTradeWapPayRequest;
 import com.alipay.api.response.AlipayTradeWapPayResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.youkeda.dewu.model.PayType;
-import com.youkeda.dewu.model.PaymentRecord;
-import com.youkeda.dewu.model.PaymentStatus;
-import com.youkeda.dewu.model.Result;
+import com.youkeda.dewu.model.*;
 import com.youkeda.dewu.param.PaymentParam;
 import com.youkeda.dewu.param.PaymentRecordQueryParam;
+import com.youkeda.dewu.service.OrderService;
 import com.youkeda.dewu.service.PayService;
 import com.youkeda.dewu.service.PaymentRecordService;
 import org.slf4j.Logger;
@@ -35,6 +33,9 @@ public class PayServiceImpl implements PayService {
 
     @Autowired
     private PaymentRecordService paymentRecordService;
+
+    @Autowired
+    private OrderService orderService;
 
 
     @Value("${alipay.app.id:2021001172660270}")
@@ -108,8 +109,35 @@ public class PayServiceImpl implements PayService {
 
     @Override
     public Result payOrder(PaymentParam paymentParam) {
+        Result result = new Result<>();
+        switch (paymentParam.getPayType()) {
+            case ALIPAY:
+                result = this.aliPay(paymentParam.getOrderNumber(), paymentParam);
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
 
-        return null;
+    @Override
+    public Result alipayCallBack(Map<String, String> mapParam) {
+        Result result = new Result();
+        result.setSuccess(true);
+        String status = mapParam.get("trade_status");
+        String orderNum = mapParam.get("out_trade_no");
+        Order order = orderService.getByOrderNumber(orderNum);
+        String endTime = mapParam.get("gmt_close");
+        if (order != null) {
+            //交易成功
+            if ("TRADE_SUCCESS".equals(status)) {
+
+            }
+            //交易关闭
+            if ("TRADE_CLOSED".equals(status)) {
+            }
+        }
+        return result;
     }
 
     /**

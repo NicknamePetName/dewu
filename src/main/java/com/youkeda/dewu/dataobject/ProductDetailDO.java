@@ -26,7 +26,6 @@ public class ProductDetailDO {
      * 尺码
      */
     private Double size;
-
     /**
      * 库存
      */

@@ -47,22 +47,15 @@ public class ProductDetailServiceImpl implements ProductDetailService {
 
     @Override
     public List<ProductDetail> getByProductId(String productId) {
-
-        List<ProductDetail> productDetails = new ArrayList<>();
         if (StringUtils.isBlank(productId)) {
-            return productDetails;
+            return new ArrayList<>();
         }
 
         List<ProductDetailDO> productDetailDOS = productDetailDAO.selectByProductId(productId);
-        if (CollectionUtils.isEmpty(productDetailDOS)) {
-            return productDetails;
-        }
 
-        for (ProductDetailDO productDetailDO : productDetailDOS) {
-            productDetails.add(productDetailDO.convertToModel());
-        }
-
-        return productDetails;
+        return CollectionUtils.isEmpty(productDetailDOS) ? new ArrayList<>() : productDetailDOS.stream()
+                .map(ProductDetailDO::convertToModel)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -70,8 +63,7 @@ public class ProductDetailServiceImpl implements ProductDetailService {
         if (StringUtils.isBlank(id)) {
             return null;
         }
-        ProductDetailDO productDetailDO = productDetailDAO.selectByPrimaryKey(id);
-        ProductDetail productDetail = productDetailDO.convertToModel();
-        return productDetail;
+
+        return productDetailDAO.selectByPrimaryKey(id).convertToModel();
     }
 }

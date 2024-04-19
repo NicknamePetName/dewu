@@ -78,9 +78,9 @@ public class OrderServiceImpl implements OrderService {
 
         List<User> users = userService.queryUser(userIds);
         List<ProductDetail> productDetails = productDetailService.queryProductDetail(productDetailIds);
+        Map<Long, User> userMap = users.stream().collect(Collectors.toMap(User::getId, t -> t));
         Map<String, ProductDetail> productDetailMap = productDetails.stream().collect(
                 Collectors.toMap(ProductDetail::getId, t -> t));
-        Map<Long, User> userMap = users.stream().collect(Collectors.toMap(User::getId, t -> t));
 
         orders.forEach(order -> {
             order.setProductDetail(productDetailMap.get(order.getProductDetailId()));
@@ -95,11 +95,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order getBYOrderNumber(String orderNumber) {
+    public Order getByOrderNumber(String orderNumber) {
         if (StringUtils.isBlank(orderNumber)) {
             return null;
         }
-        return orderDAO.selectBYOrderNumber(orderNumber).convertToModel();
+        OrderDO orderDO = orderDAO.selectByOrderNumber(orderNumber);
+        return orderDO != null ? orderDO.convertToModel() : null;
+    }
+
+    @Override
+    public Order updateOrderStatus(String orderNumber, OrderStatus orderStatus) {
+        OrderDO orderDO = orderDAO.selectByOrderNumber(orderNumber);
+
+        if (orderDO == null) {
+            return null;
+        }
+
+        orderDO.setStatus(orderStatus.toString());
+        orderDO.setStatus(String.valueOf(orderStatus));
+        orderDAO.update(orderDO);
+        return orderDO.convertToModel();
     }
 
     /**

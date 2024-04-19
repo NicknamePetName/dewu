@@ -16,10 +16,8 @@
         where id = #{id,jdbcType=VARCHAR}
     </delete>
 
-    <insert id="insert" parameterType="com.youkeda.dewu.dataobject.ProductDO">
-        insert into product (id, name, price,
-                             purchase_num, product_intro,product_imgs, gmt_created,
-                             gmt_modified)
+    <insert id="insert" parameterType="com.youkeda.dewu.dataobject.ProductDO" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into product
         values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE},
                 #{purchaseNum,jdbcType=INTEGER}, #{productIntro,jdbcType=VARCHAR},#{productImgs,jdbcType=VARCHAR}, now(),now())
     </insert>

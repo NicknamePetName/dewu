@@ -1,6 +1,7 @@
 package com.youkeda.dewu.service;
 
 import com.youkeda.dewu.model.Order;
+import com.youkeda.dewu.model.OrderStatus;
 import com.youkeda.dewu.model.Paging;
 import com.youkeda.dewu.param.QueryOrderParam;
 
@@ -26,5 +27,13 @@ public interface OrderService {
      * @param orderNumber
      * @return Order
      */
-    Order getBYOrderNumber(String orderNumber);
+    Order getByOrderNumber(String orderNumber);
+
+    /**
+     * 更新订单状态
+     * @param orderNumber
+     * @param orderStatus
+     * @return
+     */
+    Order updateOrderStatus(String orderNumber, OrderStatus orderStatus);
 }

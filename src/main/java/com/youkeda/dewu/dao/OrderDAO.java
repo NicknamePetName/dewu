@@ -13,6 +13,7 @@ public interface OrderDAO {
     int selectCounts(QueryOrderParam param);
     List<OrderDO> pageQuery(QueryOrderParam param);
 
-    OrderDO selectBYOrderNumber(@Param("orderNumber") String orderNumber);
+    OrderDO selectByOrderNumber(@Param("orderNumber") String orderNumber);
 
+    int update(OrderDO orderDO);
 }
