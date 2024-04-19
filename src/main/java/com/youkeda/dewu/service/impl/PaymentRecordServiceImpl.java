@@ -56,4 +56,13 @@ public class PaymentRecordServiceImpl implements PaymentRecordService {
                 .map(PaymentRecordDO::convertToModel)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public PaymentRecord updateStatus(PaymentRecord paymentRecord) {
+
+        if (paymentRecord == null || paymentRecord.getId() == null) {
+            return null;
+        }
+        return paymentRecordDAO.update(new PaymentRecordDO(paymentRecord)) < 1 ? null : paymentRecord;
+    }
 }

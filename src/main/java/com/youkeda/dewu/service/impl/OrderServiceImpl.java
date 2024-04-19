@@ -2,15 +2,20 @@ package com.youkeda.dewu.service.impl;
 
 import com.youkeda.dewu.dao.OrderDAO;
 import com.youkeda.dewu.dataobject.OrderDO;
+import com.youkeda.dewu.dataobject.ProductDetailDO;
 import com.youkeda.dewu.model.*;
 import com.youkeda.dewu.param.QueryOrderParam;
 import com.youkeda.dewu.service.OrderService;
 import com.youkeda.dewu.service.ProductDetailService;
+import com.youkeda.dewu.service.ProductService;
 import com.youkeda.dewu.service.UserService;
 import com.youkeda.dewu.util.UUIDUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RAtomicLong;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    private static final Logger LOG = LoggerFactory.getLogger(OrderServiceImpl.class);
     @Autowired
     private RedissonClient redisson;
     @Autowired
@@ -33,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
     private ProductDetailService productDetailService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ProductService productService;
 
     @Override
     public Order add(Order order) {
@@ -114,6 +122,37 @@ public class OrderServiceImpl implements OrderService {
         orderDO.setStatus(orderStatus.toString());
         orderDO.setStatus(String.valueOf(orderStatus));
         orderDAO.update(orderDO);
+        return orderDO.convertToModel();
+    }
+
+    @Override
+    public Order updateProductPersonNumber(String orderNumber) {
+        if (StringUtils.isBlank(orderNumber)) {
+            return null;
+        }
+
+        OrderDO orderDO = orderDAO.selectByOrderNumber(orderNumber);
+        if (orderDO == null) {
+            return null;
+        }
+        // 获取分布式锁
+        RLock lock = redisson.getLock("PURCHASE");
+        lock.lock();
+        try {
+            ProductDetail productDetail = productDetailService.get(orderDO.getProductDetailId());
+            if (productDetail == null) {
+                return null;
+            }
+            productDetail.setStock(productDetail.getStock() - 1);
+            productDetailService.save(productDetail);
+            Product product = productService.get(productDetail.getProductId());
+            product.setPurchaseNum(product.getPurchaseNum() + 1);
+            productService.save(product);
+        }catch (Exception e) {
+            LOG.error("",e);
+        }finally {
+            lock.unlock();
+        }
         return orderDO.convertToModel();
     }
 

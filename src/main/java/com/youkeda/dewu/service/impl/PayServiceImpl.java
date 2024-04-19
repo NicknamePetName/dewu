@@ -131,10 +131,37 @@ public class PayServiceImpl implements PayService {
         if (order != null) {
             //交易成功
             if ("TRADE_SUCCESS".equals(status)) {
+                // 更新订单状态
+                orderService.updateOrderStatus(orderNum, OrderStatus.TRADE_PAID_SUCCESS);
 
+                // 更新支付流水
+                PaymentRecordQueryParam queryParam = new PaymentRecordQueryParam();
+                queryParam.setOrderNumber(orderNum);
+                List<PaymentRecord> paymentRecords = paymentRecordService.query(queryParam);
+                if (!CollectionUtils.isEmpty(paymentRecords)) {
+                    PaymentRecord paymentRecord = paymentRecords.get(0);
+                    paymentRecord.setPayStatus(PaymentStatus.SUCCESS);
+                    //更新支付流水状态
+                    paymentRecordService.updateStatus(paymentRecord);
+                }
+                //更新商品付款人数
+                orderService.updateProductPersonNumber(orderNum);
             }
             //交易关闭
             if ("TRADE_CLOSED".equals(status)) {
+                // 更新订单状态
+                orderService.updateOrderStatus(orderNum, OrderStatus.TRADE_PAID_FAILED);
+
+                //更新支付流水
+                PaymentRecordQueryParam queryParam = new PaymentRecordQueryParam();
+                queryParam.setOrderNumber(orderNum);
+                List<PaymentRecord> paymentRecords = paymentRecordService.query(queryParam);
+                if (!CollectionUtils.isEmpty(paymentRecords)) {
+                    PaymentRecord paymentRecord = paymentRecords.get(0);
+                    paymentRecord.setPayStatus(PaymentStatus.FAILURE);
+                    //更新支付流水状态
+                    paymentRecordService.updateStatus(paymentRecord);
+                }
             }
         }
         return result;

@@ -1,5 +1,6 @@
 package com.youkeda.dewu.service;
 
+import com.youkeda.dewu.dataobject.OrderDO;
 import com.youkeda.dewu.model.Order;
 import com.youkeda.dewu.model.OrderStatus;
 import com.youkeda.dewu.model.Paging;
@@ -24,6 +25,7 @@ public interface OrderService {
 
     /**
      * 根据订单号查询
+     *
      * @param orderNumber
      * @return Order
      */
@@ -31,9 +33,18 @@ public interface OrderService {
 
     /**
      * 更新订单状态
+     *
      * @param orderNumber
      * @param orderStatus
      * @return
      */
     Order updateOrderStatus(String orderNumber, OrderStatus orderStatus);
+
+    /**
+     * 更新商品付款人数
+     *
+     * @param orderNumber
+     * @return
+     */
+    Order updateProductPersonNumber(String orderNumber);
 }
